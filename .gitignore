@@ -2,3 +2,4 @@ node_modules/
 .env
 database.sqlite
 main.txt
+docker-compose.yml
