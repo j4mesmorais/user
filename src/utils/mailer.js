@@ -12,6 +12,10 @@ const transporter = nodemailer.createTransport({
   tls: {
     rejectUnauthorized: process.env.SMTP_OPENSSL_VERIFY_MODE === 'none'
   },
+
+  debug: true, // Habilita logs detalhados
+  logger: true, // Exibe os logs no console
+
 });
 
 const sendEmail = (to, subject, text) => {

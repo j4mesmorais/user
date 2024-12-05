@@ -215,7 +215,13 @@ const router = express.Router();
 router.post('/redefinipasswordlink', async (req, res) => {
   const { email } = req.body;
 
+  console.log('Início do endpoint redefinipasswordlink');
+
+
+
   try {
+    console.log('Buscando usuário com email:', email);
+
     const user = await User.findOne({ where: { email } });
 
     if (!user) {
@@ -228,6 +234,7 @@ router.post('/redefinipasswordlink', async (req, res) => {
     // Definir o token e a data de expiração no usuário
     user.resetPasswordToken = resetToken;
     user.resetPasswordExpires = Date.now() + 3600000; // 1 hora
+    console.log('Salva o token no cadastro do usuario');
     await user.save();
     //Para usar o N8N foi necessario passar o valor do token por query params
     //const resetLink = process.env.URL_LOGIN_FORM+'?'+'token='+resetToken;
@@ -235,11 +242,19 @@ router.post('/redefinipasswordlink', async (req, res) => {
 
     const subject = 'Redefinição de Senha';
     const text = `Você solicitou uma redefinição de senha. Clique no link a seguir para redefinir sua senha: ${resetLink}`;
+    
+    console.log('Começa a enviar o e-mail');
 
-    await sendEmail(email, subject, text);
+    await sendEmail(email, subject, text).catch(err => {
+        console.error('Erro ao enviar e-mail:', err);
+        throw new Error('Falha no envio de e-mail');
+      });
 
     res.status(200).json({status: 'success', message: 'Link de redefinição de senha enviado com sucesso' });
   } catch (error) {
+
+    console.error('Erro no redefinipasswordlink:', error);
+ 
     res.status(500).json({status: 'error', message: 'Erro interno do servidor' });
   }
 });
