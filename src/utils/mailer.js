@@ -13,8 +13,8 @@ const transporter = nodemailer.createTransport({
     rejectUnauthorized: process.env.SMTP_OPENSSL_VERIFY_MODE === 'none'
   },
 
-  debug: true, // Habilita logs detalhados
-  logger: true, // Exibe os logs no console
+  //debug: true, // Habilita logs detalhados
+  //logger: true, // Exibe os logs no console
 
 });
 
